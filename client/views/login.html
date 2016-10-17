@@ -1,1 +1,38 @@
+<div class="container">
+	<div class="login" ng-hide="login_form">
+		<form>
+			<div class="form-group">
+				<input type="text" class="form-control" placeholder="username">
+			</div>
+			<div class="form-group">
+				<input type="password" class="form-control" placeholder="password">
+			</div>
+			<button type="submit" class="btn btn-primary">Login</button>
+		</form>
+		<p>
+			New to blizzmate? <button type="button" class="btn btn-warning" ng-click="login_form = !login_form">join us!</button>
+		</p>
+	</div>
+	<div class="registration" ng-show="login_form">
+		<form>
+			<div class="form-group">
+				<input type="text" class="form-control" placeholder="username">
+			</div>
+			<div class="form-group">
+				<input type="text" class="form-control" placeholder="email">
+			</div>
+			<div class="form-group">
+				<input type="text" class="form-control" placeholder="password">
+			</div>
+			<div class="form-group">
+				<input type="text" class="form-control" placeholder="confirm password">
+			</div>
+			<button type="submit" class="btn btn-primary">Login</button>
+		</form>
+		<p>
+			Already a member? <button type="button" class="btn btn-info" ng-click="login_form = !login_form">Login!</button>
+		</p>
+	</div>
+</div>
+
 <h1>login.html</h1>

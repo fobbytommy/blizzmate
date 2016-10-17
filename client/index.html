@@ -21,7 +21,6 @@
 		<link rel="stylesheet" type="text/css" href="/static/css/style.css">
 	</head>
 	<body>
-		<h1>check check check!</h1>
 		<div ng-view="">
 			<!-- partials to be loaded in this div -->
 		</div>
@@ -35,9 +34,13 @@
 
 		<!-- load angularJS and its dependencies -->
 		<script type="text/javascript" src="/socket.io/socket.io.js"></script>
-		<script type="text/javascript" src="/static/js/angular.min.js"></script>
-		<script type="text/javascript" src="/static/js/angular-route.min.js"></script>
-		<script type="text/javascript" src="/static/js/angular-cookies.min.js"></script>
+		<script type="text/javascript" src="/static/js/angular/angular.min.js"></script>
+		<script type="text/javascript" src="/static/js/angular/angular-route.min.js"></script>
+		<script type="text/javascript" src="/static/js/angular/angular-cookies.min.js"></script>
+		<!-- <script type="text/javascript" src="/static/js/angular/angular-animate.min.js"></script>
+		<script type="text/javascript" src="/static/js/angular/angular-touch.min.js"></script>
+		<script type="text/javascript" src="/static/js/ui-bootstrap-tpls-2.2.0.min.js"></script> -->
+
 
 		<!-- load angular.module and config -->
 
@@ -47,12 +50,14 @@
 
 
 		<script type="text/javascript">
-			var app = angular.module('app', ['ngRoute', 'ngCookies'])
+
+			var app = angular.module('app', ['ngRoute', 'ngCookies']);
 
 			app.config(['$routeProvider', function($routeProvider) {
 				$routeProvider
 					.when('/' ,{
-						templateUrl: "views/cover.html"
+						templateUrl: 'views/cover.html',
+						controller: 'CoverController'
 					})
 					.when('/login', {
 						templateUrl: "views/login.html"
@@ -60,6 +65,11 @@
 					.otherwise({
 						redirectTo: '/'
 					});
+			}]);
+
+			// CoverController
+			app.controller('CoverController', ['$scope', function($scope) {
+
 			}]);
 		</script>
 
