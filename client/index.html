@@ -60,15 +60,117 @@
 						controller: 'CoverController'
 					})
 					.when('/login', {
-						templateUrl: "views/login.html"
+						templateUrl: "views/login.html",
+						controller: 'UserController'
+					})
+					.when('/home', {
+						templateUrl: "views/home.html",
+						controller: 'HomeController'
 					})
 					.otherwise({
 						redirectTo: '/'
 					});
 			}]);
 
+			// usersFactory
+			app.factory('usersFactory', ['$http', function($http) {
+
+				function UsersFactory() {
+
+					this.login = function(loginUser, callback) {
+						$http.post('/users/login', loginUser).then(
+							function success(response) {
+								if (typeof(response.data.errors) != 'undefined') {
+									callback(false, response.data.errors);
+								}
+								else {
+									callback(true, response.data);
+								}
+							},
+							function error(response) {
+								console.log("[login: ERROR] server failed to proccess login.");
+							}
+						)
+					};
+
+					this.register = function(newUser, callback) {
+						$http.post('/users/register', newUser).then(
+							function success(response) {
+								if (typeof(response.data.errors) != 'undefined') {
+									callback(false, response.data.errors);
+								}
+								else {
+									callback(true, response.data);
+								}
+							},
+							function error(response) {
+								console.log("[register: Error] server has failed to register a new user.");
+							}
+						)
+					};
+
+				}
+
+				return new UsersFactory();
+			}]);
+
 			// CoverController
 			app.controller('CoverController', ['$scope', function($scope) {
+
+			}]);
+
+			// UserController
+			app.controller("UserController", ['$scope', '$location', '$cookies', 'usersFactory', function ($scope, $location, $cookies, usersFactory) {
+				$scope.newUser = {};
+				$scope.loginUser = {};
+
+				$scope.login = function() {
+					usersFactory.login($scope.loginUser, function(status, response) {
+						if (status == false) {
+							$scope.loginError = response;
+							$scope.loginUser.password = ""; // empty password for retype
+						}
+						else {
+							$scope.loginError = {};
+							$scope.loginUser = {};
+							$cookies.put('username', response.username);
+							$cookies.put('authority', response.authority);
+							$location.url('/home');
+						}
+					});
+				};
+
+				$scope.register = function() {
+					if ($scope.newUser.password != $scope.newUser.confirm_password) {
+						$scope.match_error = { error: "Your password does not match!" };
+						$scope.newUser.confirm_password = "";
+					}
+					else {
+						$scope.match_error = null; // clear matching password error
+						usersFactory.register($scope.newUser, function(status, response) {
+							if (status == false) {
+								$scope.registerError = response;
+							}
+							else {
+								// register successful get the user to the home page
+								$scope.registerError = {};
+								$scope.newUser = {};
+								$cookies.put('username', response.username);
+								$cookies.put('authority', response.authority);
+								$location.url('/home');
+							}
+						});
+					}
+				};
+
+
+			}]);
+
+
+			// HomeController
+			app.controller('HomeController', ['$scope', '$location', '$cookies', function($scope, $location, $cookies) {
+				$scope.username = $cookies.get('username');
+				$scope.authority = $cookies.get('authority');
 
 			}]);
 		</script>

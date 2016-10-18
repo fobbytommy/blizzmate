@@ -1,11 +1,16 @@
 <div class="container">
 	<div class="login" ng-hide="login_form">
-		<form>
-			<div class="form-group">
-				<input type="text" class="form-control" placeholder="username">
+		<form ng-submit="login()">
+			<div class="alert alert-danger alert-dismissible fade in" ng-if="loginError">
+				<span>
+					{{ loginError }}
+				</span>
 			</div>
 			<div class="form-group">
-				<input type="password" class="form-control" placeholder="password">
+				<input type="text" class="form-control" placeholder="username" ng-model="loginUser.username">
+			</div>
+			<div class="form-group">
+				<input type="password" class="form-control" placeholder="password" ng-model="loginUser.password">
 			</div>
 			<button type="submit" class="btn btn-primary">Login</button>
 		</form>
@@ -14,20 +19,30 @@
 		</p>
 	</div>
 	<div class="registration" ng-show="login_form">
-		<form>
-			<div class="form-group">
-				<input type="text" class="form-control" placeholder="username">
+		<form ng-submit="register()">
+			<div class="alert alert-danger alert-dismissible fade in" ng-if="registerError" ng-repeat="errors in registerError">
+				<span>
+					{{ errors.message }}
+				</span>
 			</div>
 			<div class="form-group">
-				<input type="text" class="form-control" placeholder="email">
+				<input type="text" class="form-control" placeholder="username" ng-model="newUser.username">
 			</div>
 			<div class="form-group">
-				<input type="text" class="form-control" placeholder="password">
+				<input type="text" class="form-control" placeholder="email" ng-model="newUser.email">
+			</div>
+			<div class="alert alert-danger alert-dismissible fade in" ng-if="match_error">
+				<span>
+					{{ match_error.error }}
+				</span>
 			</div>
 			<div class="form-group">
-				<input type="text" class="form-control" placeholder="confirm password">
+				<input type="text" class="form-control" placeholder="password" ng-model="newUser.password">
 			</div>
-			<button type="submit" class="btn btn-primary">Login</button>
+			<div class="form-group">
+				<input type="text" class="form-control" placeholder="confirm password" ng-model="newUser.confirm_password">
+			</div>
+			<button type="submit" class="btn btn-primary">Register!</button>
 		</form>
 		<p>
 			Already a member? <button type="button" class="btn btn-info" ng-click="login_form = !login_form">Login!</button>

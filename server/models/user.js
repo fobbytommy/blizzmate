@@ -68,7 +68,7 @@ userSchema.plugin(uniqueVal, {message: "'{VALUE}' is already taken. Use another 
 
 // create a method to generate hash for the password
 userSchema.methods.generateHash = function(password) {
-	return bcrypt.hashSync(password, genSaltSync(8));
+	return bcrypt.hashSync(password, bcrypt.genSaltSync(8));
 }
 
 // before saving, call the generateHash method to hash the password
