@@ -34,15 +34,16 @@
 		<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
 		<script type="text/javascript" src="/static/js/ie10-viewport.js"></script>
 
-		<!-- load angularJS and its dependencies -->
+		<!-- load socket.io -->
 		<script type="text/javascript" src="/socket.io/socket.io.js"></script>
+
+		<!-- load angularJS and its dependencies -->
 		<script type="text/javascript" src="/static/js/angular/angular.min.js"></script>
 		<script type="text/javascript" src="/static/js/angular/angular-route.min.js"></script>
 		<script type="text/javascript" src="/static/js/angular/angular-cookies.min.js"></script>
 		<!-- <script type="text/javascript" src="/static/js/angular/angular-animate.min.js"></script>
 		<script type="text/javascript" src="/static/js/angular/angular-touch.min.js"></script>
 		<script type="text/javascript" src="/static/js/ui-bootstrap-tpls-2.2.0.min.js"></script> -->
-
 
 		<!-- load angular.module and config -->
 		<script type="text/javascript" src="/assets/app.js"></script>
@@ -53,7 +54,27 @@
 
 		<script type="text/javascript">
 
+			// socketsFactory
+			app.factory('socketsFactory', ['$http', function($http) {
+				// establish socket connection
+				var socket = io.connect();
 
+				function Socket() {
+
+					this.emit = function(eventName, data) {
+						socket.emit(eventName, data);
+					};
+
+					this.on	= function(eventName, callback) {
+						socket.on(eventName, function(data) {
+							callback(data);
+						});
+					};
+
+				}
+
+				return new Socket();
+			}]);
 
 			// usersFactory
 			app.factory('usersFactory', ['$http', '$cookies', function($http, $cookies) {
@@ -165,20 +186,33 @@
 
 
 			// HomeController
-			app.controller('HomeController', ['$scope', '$location', '$cookies', 'usersFactory', function($scope, $location, $cookies, usersFactory) {
+			app.controller('HomeController', ['$scope', '$window','$location', '$cookies', 'usersFactory', 'socketsFactory', function($scope, $window, $location, $cookies, usersFactory, socketsFactory) {
 
 				usersFactory.loginStatus(function(status) {
 					if (!status) {
 						$location.url('/login');
 					}
 					else {
+						socketsFactory.emit('user_online');
 						$scope.username = $cookies.get('username');
 						$scope.authority = $cookies.get('authority');
 					}
 				});
 
+				socketsFactory.on('users_count', function(data) {
+				 	$scope.userCount = data.userCount;
+					$scope.$apply();
+				});
+
+				$window.onbeforeunload = function() {
+					if ($scope.username) {
+						socketsFactory.emit('user_offline');
+					}
+					// else do nothing;
+				};
 
 				$scope.logout = function() {
+					socketsFactory.emit('user_offline');
 					usersFactory.logout();
 					$location.url('/login');
 				};
