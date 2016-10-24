@@ -211,6 +211,44 @@
 					// else do nothing;
 				};
 
+				$scope.go_sc2_mate = function() {
+					// socketsFactory.emit('user_online');
+					$location.url('/sc2/mate');
+				}
+
+				$scope.logout = function() {
+					socketsFactory.emit('user_offline');
+					usersFactory.logout();
+					$location.url('/login');
+				};
+			}]);
+
+			// StarcraftController
+			app.controller("StarcraftController", ['$scope', '$window','$location', '$cookies', 'usersFactory', 'socketsFactory', function($scope, $window, $location, $cookies, usersFactory, socketsFactory) {
+				$scope.newGame = {
+					style: 'Casual',
+					server: 'North America',
+					rank: 'N/A',
+					type: 'Sparring Partner'
+				};
+
+				usersFactory.loginStatus(function(status) {
+					if (!status) {
+						$location.url('/login');
+					}
+					else {
+						socketsFactory.emit('user_online');
+						$scope.username = $cookies.get('username');
+						$scope.authority = $cookies.get('authority');
+					}
+				});
+
+				$scope.createGame = function() {
+					socketsFactory.emit('sc2_newGame', $scope.newGame);
+					console.log($scope.newGame);
+					console.log("triggered");
+				};
+
 				$scope.logout = function() {
 					socketsFactory.emit('user_offline');
 					usersFactory.logout();

@@ -1,0 +1,56 @@
+<h1>sc2_mate.html</h1>
+<button type="button" class="btn btn-danger btn-lg" ng-click="create_form = !create_form" ng-hide="create_form">create a game</button>
+<form ng-submit="createGame()" ng-show="create_form">
+	<div class="form-group">
+		channel
+		<input type="channel" class="form-control" placeholder="blizzmate" ng-model="newGame.channel">
+	</div>
+	<div class="form-group">
+		sc2 name
+		<input type="text" class="form-control" placeholder="choding#1234" ng-model="newGame.screen_name">
+	</div>
+	<div class="form-group">
+		server
+		<select class="form-control" ng-model="newGame.server">
+			<option>North America</option>
+			<option>Korea</option>
+			<option>Sea</option>
+			<option>Europe</option>
+		</select>
+	</div>
+	<div class="form-group">
+		Rank (if applicable)
+		<select class="form-control" ng-model="newGame.rank">
+			<option>N/A</option>
+			<option>Bronze</option>
+			<option>Silver</option>
+			<option>Gold</option>
+			<option>Platinum</option>
+			<option>Master</option>
+			<option>Grand Master</option>
+		</select>
+	</div>
+	<div class="form-group">
+		Casual or Serious?
+		<select class="form-control" ng-model="newGame.style">
+			<option>Casual</option>
+			<option>Serious</option>
+		</select>
+	</div>
+	<div class="form-group">
+		Looking for
+		<select class="form-control" ng-model="newGame.type">
+			<option>Sparring Partner</option>
+			<option>Archon mode partner</option>
+			<option>Duo (2v2)</option>
+			<option>Team games (3v3, 4v4)</option>
+			<option>co-op mission</option>
+			<option>Arcade</option>
+			<option>Custom</option>
+		</select>
+	</div>
+
+	<button type="submit" class="btn btn-info btn-lg">Add!</button>
+</form>
+<button type="button" class="btn btn-warning btn-lg" ng-show="create_form" ng-click="create_form = !create_form">Hide create form</button>
+<button type="button" class="btn btn-primary btn-lg" ng-click="logout()">Logout</button>

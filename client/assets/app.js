@@ -14,6 +14,10 @@ app.config(['$routeProvider', '$locationProvider', function($routeProvider, $loc
 			templateUrl: "/views/home.html",
 			controller: 'HomeController'
 		})
+		.when('/sc2/mate', {
+			templateUrl: "/views/sc2_mate.html",
+			controller: 'StarcraftController'
+		})
 		.otherwise({
 			redirectTo: '/'
 		});
